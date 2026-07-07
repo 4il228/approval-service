@@ -3,7 +3,10 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from app.core.logging import setup_log_masking
 from app.database import engine
+
+setup_log_masking()
 
 
 @asynccontextmanager
