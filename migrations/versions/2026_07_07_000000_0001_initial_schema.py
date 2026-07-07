@@ -10,7 +10,6 @@ from collections.abc import Sequence
 
 import sqlalchemy as sa
 from alembic import op
-from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
 revision: str = "0001"
@@ -24,7 +23,7 @@ def upgrade() -> None:
         "approval_requests",
         sa.Column(
             "id",
-            postgresql.UUID(as_uuid=True),
+            sa.String(36),
             primary_key=True,
         ),
         sa.Column("workspace_id", sa.String(255), nullable=False),
@@ -32,7 +31,7 @@ def upgrade() -> None:
         sa.Column("source_id", sa.String(255), nullable=False),
         sa.Column("title", sa.String(500), nullable=False),
         sa.Column("description", sa.Text(), nullable=True),
-        sa.Column("reviewers", postgresql.JSON(), nullable=False, server_default="[]"),
+        sa.Column("reviewers", sa.Text(), nullable=False, server_default="[]"),
         sa.Column("status", sa.String(20), nullable=False, server_default="PENDING"),
         sa.Column("idempotency_key", sa.String(255), nullable=True, unique=True),
         sa.Column(
@@ -63,18 +62,18 @@ def upgrade() -> None:
         "audit_logs",
         sa.Column(
             "id",
-            postgresql.UUID(as_uuid=True),
+            sa.String(36),
             primary_key=True,
         ),
         sa.Column(
             "request_id",
-            postgresql.UUID(as_uuid=True),
+            sa.String(36),
             sa.ForeignKey("approval_requests.id", ondelete="CASCADE"),
             nullable=False,
         ),
         sa.Column("actor_user_id", sa.String(255), nullable=False),
         sa.Column("action", sa.String(50), nullable=False),
-        sa.Column("payload", postgresql.JSON(), nullable=True),
+        sa.Column("payload", sa.Text(), nullable=True),
         sa.Column(
             "created_at",
             sa.DateTime(timezone=True),

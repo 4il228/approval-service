@@ -6,7 +6,7 @@ from dataclasses import dataclass
 class Settings:
     database_url: str = os.getenv(
         "DATABASE_URL",
-        "postgresql+asyncpg://postgres:postgres@localhost:5432/approval_db",
+        "sqlite+aiosqlite:///./approval.db",
     )
     db_echo: bool = False
 

@@ -23,7 +23,7 @@ pip install -r requirements.txt
 2. Настроить переменную окружения:
 
 ```bash
-export DATABASE_URL=postgresql+asyncpg://postgres:postgres@localhost:5432/approval_db
+export DATABASE_URL=sqlite+aiosqlite:///./approval.db
 ```
 
 3. Запустить миграции:
@@ -104,7 +104,7 @@ curl -X POST http://localhost:8000/api/v1/workspaces/ws_1/approval-requests \
 ## Стек
 
 - Python 3.11 + FastAPI
-- PostgreSQL 16 (asyncpg)
+- SQLite (aiosqlite)
 - SQLAlchemy 2.0 + Alembic
 - Docker + Docker Compose
 - pytest + pytest-asyncio
