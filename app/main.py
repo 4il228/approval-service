@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from app.api.v1.approval_requests import router as approval_router
 from app.core.logging import setup_log_masking
 from app.database import engine
 
@@ -21,6 +22,8 @@ app = FastAPI(
     version="0.1.0",
     lifespan=lifespan,
 )
+
+app.include_router(approval_router)
 
 
 @app.get("/health")
