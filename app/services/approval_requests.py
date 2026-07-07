@@ -169,3 +169,14 @@ async def cancel_request(
     await session.commit()
     await session.refresh(request)
     return request
+
+
+async def get_audit_logs(
+    session: AsyncSession, request_id: uuid.UUID
+) -> list[AuditLog]:
+    result = await session.execute(
+        select(AuditLog)
+        .where(AuditLog.request_id == request_id)
+        .order_by(AuditLog.created_at.asc())
+    )
+    return list(result.scalars().all())
