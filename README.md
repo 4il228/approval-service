@@ -100,6 +100,7 @@ curl -X POST http://localhost:8000/api/v1/workspaces/ws_1/approval-requests \
 | `POST` | `.../{request_id}/approve` | Согласование заявки | `approval:decide` |
 | `POST` | `.../{request_id}/reject` | Отклонение заявки | `approval:decide` |
 | `POST` | `.../{request_id}/cancel` | Отмена заявки | `approval:cancel` |
+| `GET` | `.../{request_id}/audit` | Аудит-логи заявки | `approval:read` |
 
 ## Стек
 
