@@ -52,3 +52,14 @@ class RejectRequest(BaseModel):
 
 class CancelRequest(BaseModel):
     reason: str
+
+
+class AuditLogResponse(BaseModel):
+    id: uuid.UUID
+    request_id: uuid.UUID
+    actor_user_id: str
+    action: str
+    payload: dict | None
+    created_at: datetime
+
+    model_config = {"from_attributes": True}

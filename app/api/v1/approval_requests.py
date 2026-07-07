@@ -13,6 +13,7 @@ from app.database import get_session
 from app.schemas.approval_requests import (
     ApprovalRequestResponse,
     ApproveRequest,
+    AuditLogResponse,
     CancelRequest,
     CreateApprovalRequest,
     RejectRequest,
@@ -22,6 +23,7 @@ from app.services.approval_requests import (
     cancel_request,
     create_approval_request,
     get_approval_request,
+    get_audit_logs,
     list_approval_requests,
     reject_request,
 )
@@ -171,3 +173,24 @@ async def cancel(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     return request
+
+
+@router.get(
+    "/api/v1/workspaces/{workspace_id}/approval-requests/{request_id}/audit",
+    response_model=list[AuditLogResponse],
+)
+async def audit(
+    workspace_id: str,
+    request_id: uuid.UUID,
+    auth: AuthContext = Depends(get_auth_context),
+    session: AsyncSession = Depends(get_session),
+):
+    validate_workspace_access(auth, workspace_id)
+    require_permission(auth, "approval:read")
+
+    request = await get_approval_request(session, workspace_id, request_id)
+    if not request:
+        raise HTTPException(status_code=404, detail="Approval request not found")
+
+    logs = await get_audit_logs(session, request_id)
+    return logs
